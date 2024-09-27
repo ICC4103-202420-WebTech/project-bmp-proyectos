@@ -1,0 +1,28 @@
+<h1>Forum for <%= @forum.lection.title %></h1>
+
+<h2>Questions</h2>
+<ul>
+  <% @questions.each do |question| %>
+    <li>
+      <p><strong><%= question.user.name %>:</strong> <%= question.content %></p>
+      <h4>Answers</h4>
+      <ul>
+        <% question.answers.each do |answer| %>
+          <li><%= answer.content %> (by <%= answer.user.name %>)</li>
+        <% end %>
+      </ul>
+
+      <h5>Write an answer:</h5>
+      <%= form_with model: [question, Answer.new], url: question_answers_path(question), method: :post do |f| %>
+        <%= f.text_area :content %>
+        <%= f.submit "Answer" %>
+      <% end %>
+    </li>
+  <% end %>
+</ul>
+
+<h3>Ask a Question:</h3>
+<%= form_with model: [@forum, Question.new], url: forum_questions_path(@forum), method: :post do |f| %>
+  <%= f.text_area :content %>
+  <%= f.submit "Ask Question" %>
+<% end %>

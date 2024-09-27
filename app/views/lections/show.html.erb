@@ -1,0 +1,31 @@
+<h1><%= @lection.title %></h1>
+<p><%= @lection.content %></p>
+
+<h2>Forum</h2>
+<% if @forum %>
+  <h3>Questions</h3>
+  <ul>
+    <% @questions.each do |question| %>
+      <li>
+        <%= question.content %>
+        <ul>
+          <% question.answers.each do |answer| %>
+            <li><%= answer.content %> (by <%= answer.user.name %>)</li>
+          <% end %>
+        </ul>
+        <%= form_with model: [question, Answer.new], url: question_answers_path(question), method: :post do |f| %>
+          <%= f.text_area :content %>
+          <%= f.submit "Answer" %>
+        <% end %>
+      </li>
+    <% end %>
+  </ul>
+
+  <h3>Ask a Question</h3>
+  <%= form_with model: [@forum, Question.new], url: forum_questions_path(@forum), method: :post do |f| %>
+    <%= f.text_area :content %>
+    <%= f.submit "Ask Question" %>
+  <% end %>
+<% else %>
+  <p>No forum available for this lesson.</p>
+<% end %>

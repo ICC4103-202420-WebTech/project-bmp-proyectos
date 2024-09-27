@@ -1,0 +1,20 @@
+<h1><%= @course.title %></h1>
+<p><%= @course.description %></p>
+
+<h2>Lessons</h2>
+<ul>
+  <% @lections.each do |lection| %>
+    <li><%= link_to lection.title, course_lection_path(@course, lection) %></li>
+  <% end %>
+</ul>
+
+<% if @inscription %>
+  <p>Your progress: <%= @inscription.progress %>%</p>
+  <%= form_with model: @inscription, url: course_inscription_path(@course, @inscription), method: :patch do |f| %>
+    <%= f.label :progress, "Update Progress" %>
+    <%= f.number_field :progress %>
+    <%= f.submit "Update" %>
+  <% end %>
+<% else %>
+  <%= button_to 'Enroll', course_inscriptions_path(@course), method: :post %>
+<% end %>

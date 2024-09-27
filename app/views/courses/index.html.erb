@@ -1,0 +1,11 @@
+<!-- app/views/courses/index.html.erb -->
+<h1><%= current_user.instructor? ? "Courses You've Published" : "Courses You've Enrolled In" %></h1>
+
+<ul>
+  <% @courses.each do |course| %>
+    <li>
+      <%= link_to course.title, course_path(course) %>
+      (<%= course.instructor.name %>)
+    </li>
+  <% end %>
+</ul>

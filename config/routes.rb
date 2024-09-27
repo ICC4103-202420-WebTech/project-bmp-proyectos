@@ -1,10 +1,23 @@
+# config/routes.rb
 Rails.application.routes.draw do
-  # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
+  devise_for :users, controllers: { sessions: 'sessions', registrations: 'registrations' }
 
-  # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
-  # Can be used by load balancers and uptime monitors to verify that the app is live.
-  get "up" => "rails/health#show", as: :rails_health_check
+  # Define root path to show login form
+  devise_scope :user do
+    root to: 'devise/sessions#new' # Root path leads to login page
+  end
 
-  # Defines the root path route ("/")
-  # root "posts#index"
+  # Custom paths for instructors and students
+  get 'instructor/courses', to: 'courses#index', as: 'instructor_courses'
+  get 'student/courses', to: 'courses#index', as: 'student_courses'
+
+  # Standard routes
+  resources :courses, only: [:index, :show] do
+    resources :lections, only: [:show] do
+      resources :forums, only: [:show] do
+        resources :questions, only: [:create]
+      end
+    end
+    resources :inscriptions, only: [:create, :update]
+  end
 end

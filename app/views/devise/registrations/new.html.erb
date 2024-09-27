@@ -1,0 +1,25 @@
+<!-- app/views/devise/registrations/new.html.erb -->
+
+<h2>Sign up</h2>
+
+<%= form_for(resource, as: resource_name, url: registration_path(resource_name), data: { turbo: false }) do |f| %>  <!-- Disable Turbo -->
+  <div><%= f.label :name %><br />
+  <%= f.text_field :name, autofocus: true %></div>
+
+  <div><%= f.label :email %><br />
+  <%= f.email_field :email %></div>
+
+  <div><%= f.label :password %><br />
+  <%= f.password_field :password, autocomplete: "off" %></div>
+
+  <div><%= f.label :password_confirmation %><br />
+  <%= f.password_field :password_confirmation, autocomplete: "off" %></div>
+
+  <!-- Add Role Selection -->
+  <div><%= f.label :role, "Are you signing up as an Instructor or Student?" %><br />
+  <%= f.select :role, User.roles.keys.map { |role| [role.titleize, role] } %></div>
+
+  <div><%= f.submit "Sign up" %></div>
+<% end %>
+
+<%= render "devise/shared/links" %>

@@ -1,0 +1,7 @@
+<h1>Your Profile</h1>
+<p><strong>Email:</strong> <%= @user.email %></p>
+<p><strong>Name:</strong> <%= @user.name %>
+<p><strong>Rol:</strong> <%= @user.role %> <!-- Replace or add fields as needed --></p>
+<p><strong>Joined:</strong> <%= @user.created_at.strftime("%B %d, %Y") %></p>
+
+<%= link_to 'Edit Profile', edit_user_registration_path, class: 'btn btn-primary' %>

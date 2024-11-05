@@ -1,0 +1,27 @@
+<h1><%= @question.content %></h1>
+
+<h2>Answers:</h2>
+<ul>
+  <% @question.answers.each do |answer| %>
+    <li>
+      <strong><%= answer.user.name %>:</strong>
+      <p><%= answer.content %></p>
+    </li>
+  <% end %>
+</ul>
+
+<% if user_signed_in? %>
+  <h2>Submit an Answer:</h2>
+  <%= form_with(model: [@question, Answer.new], local: true) do |form| %>
+    <div class="field">
+      <%= form.label :content %>
+      <%= form.text_area :content %>
+    </div>
+
+    <div class="actions">
+      <%= form.submit "Submit Answer" %>
+    </div>
+  <% end %>
+<% else %>
+  <p>You must be logged in to submit an answer.</p>
+<% end %>

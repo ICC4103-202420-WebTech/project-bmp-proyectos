@@ -1,0 +1,15 @@
+<h1>Questions for <%= @forum.title %></h1>
+
+<%= link_to 'New Question', new_course_lesson_forum_question_path(@course, @lesson, @forum), class: 'btn btn-primary' %>
+
+<ul>
+  <% @questions.each do |question| %>
+    <li>
+      <%= link_to question.content, course_lesson_forum_question_path(@course, @lesson, @forum, question) %>
+      <%= link_to 'Edit', edit_course_lesson_forum_question_path(@course, @lesson, @forum, question), class: 'btn btn-secondary' %>
+      <%= link_to 'Delete', course_lesson_forum_question_path(@course, @lesson, @forum, question), method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger' %>
+    </li>
+  <% end %>
+</ul>
+
+<%= link_to 'Back to Forums', course_lesson_forums_path(@course, @lesson), class: 'btn btn-secondary' %>

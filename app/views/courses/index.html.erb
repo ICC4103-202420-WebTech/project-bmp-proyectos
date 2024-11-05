@@ -10,6 +10,14 @@
             <h5 class="card-title"><%= course.title %></h5>
             <p class="card-text"><%= course.description %></p>
              <%= link_to 'View Lessons', course_lessons_path(course), class: 'btn btn-primary' %>
+              <% inscription = Inscription.find_by(user: current_user, course: course) %>
+ 
+  <% inscription = @inscriptions[course.id] %>
+ 
+  <div>
+
+    <p>Progress: <%= inscription ? "#{inscription.progress}%" : 'Not started' %></p>
+  </div>
     
     <% if can? :update, course %>
       <%= link_to 'Edit', edit_course_path(course), class: 'btn btn-secondary' %>

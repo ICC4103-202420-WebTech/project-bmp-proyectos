@@ -1,2 +1,15 @@
-<h1>Forums#show</h1>
-<p>Find me in app/views/forums/show.html.erb</p>
+
+<h1>Questions:</h1>
+<h2><%= @forum.title %></h2>
+<p><%= @forum.description %></p>
+
+
+
+<ul>
+  <% @questions.each do |question| %>
+    <li>
+      <%= link_to question.content, course_lesson_forum_question_path(@course, @lesson, @forum, question) %>
+      <%= link_to 'Edit', edit_course_lesson_forum_question_path(@course, @lesson, @forum, question), class: 'btn btn-secondary' %>
+    </li>
+  <% end %>
+</ul>

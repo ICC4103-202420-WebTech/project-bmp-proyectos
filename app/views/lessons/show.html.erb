@@ -1,2 +1,15 @@
-<h1>Lessons#show</h1>
-<p>Find me in app/views/lessons/show.html.erb</p>
+<h1><%= @lesson.title %></h1>
+
+<div>
+  <strong>Content Type:</strong> <%= @lesson.content_type %>
+</div>
+
+<div>
+  <strong>Content:</strong>
+  <div>
+    <%= @lesson.content.html_safe %> <!-- Use html_safe if content contains HTML -->
+  </div>
+</div>
+<%= link_to 'View Forums', course_lesson_forums_path(@course, @lesson) %>
+<%= link_to 'Edit', edit_course_lesson_path(@course, @lesson), class: 'btn btn-primary' %>
+<%= link_to 'Back to Lessons', course_lessons_path(@course), class: 'btn btn-secondary' %>

@@ -5,4 +5,5 @@ class Course < ApplicationRecord
   has_many :students, through: :inscriptions, source: :user
 
   validates :title, presence: true
+  validates :description, presence: true
 end

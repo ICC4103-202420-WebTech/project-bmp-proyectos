@@ -1,5 +1,7 @@
 class UsersController < ApplicationController
   before_action :authenticate_user!
+  load_and_authorize_resource
+
   def index
     @users = User.all
   end
@@ -24,12 +26,14 @@ class UsersController < ApplicationController
   end
 
   def edit
+    Rails.logger.debug "Params: #{params.inspect}" # Log the parameters
     @user = User.find(params[:id])
   end
 
   def update
+    @user = User.find(params[:id])
     if @user.update(user_params)
-      redirect_to @user, notice: 'User was successfully updated.'
+      redirect_to @user, notice: 'User  was successfully updated.'
     else
       render :edit
     end

@@ -1,12 +1,20 @@
 class LessonsController < ApplicationController
-  before_action :set_course
+  before_action :authenticate_user!
+  load_and_authorize_resource :course
+  load_and_authorize_resource :lesson, through: :course
+  before_action :set_course, only: [:index, :show, :new, :create, :edit, :update, :destroy]
   def index
-    @course = Course.find(params[:course_id])
-    @lessons = @course.lessons
+    if params[:course_id]
+      @course = Course.find(params[:course_id])
+      @lessons = @course.lessons
+    else
+      @lessons = Lesson.all # or handle it in another way
+    end
   end
 
   def show
-    @lesson = Lesson.find(params[:id])
+    @course = Course.find(params[:course_id])
+    @lesson = @course.lessons.find(params[:id])
   end
 
   def new
@@ -47,7 +55,10 @@ class LessonsController < ApplicationController
 
   private
   def set_course
-    @course = Course.find(params[:course_id])
+    @course = Course.find_by(id: params[:course_id])
+    unless @course
+      redirect_to courses_path, alert: 'Course not found.'
+    end
   end
   def lesson_params
     params.require(:lesson).permit(:title, :content, :content_type)

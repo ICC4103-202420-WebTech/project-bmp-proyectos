@@ -38,11 +38,16 @@ get 'profile', to: 'users#show', as: 'user_profile'
   root to: 'courses#index'
 
   resources :courses do
-    resources :lessons, only: [:index, :show, :new, :create, :edit, :update, :destroy]
+    resources :lessons, only: [:index, :show, :new, :create, :edit, :update, :destroy] do
+      resources :forums, only: [:index, :show, :new, :create, :edit, :update, :destroy] do
+        resources :questions, only: [:index, :new, :create] do
+          resources :answers, only: [:create]
+        end
+      end
+    end
   end
   
-  resources :users, only: [:show, :index]
-  resources :lessons
+  resources :users, only: [:show, :index,:edit, :update]
   resources :inscriptions
   resources :forums
   resources :questions

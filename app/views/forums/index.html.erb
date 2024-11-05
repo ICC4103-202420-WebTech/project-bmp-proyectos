@@ -1,0 +1,13 @@
+<h1>Forums for <%= @lesson.title %></h1>
+
+<%= link_to 'New Forum', new_course_lesson_forum_path(@course, @lesson), class: 'btn btn-primary' %>
+
+<ul>
+  <% @forums.each do |forum| %>
+    <li>
+      <%= link_to forum.title, course_lesson_forum_path(@course, @lesson, forum) %>
+      <%= link_to 'Edit', edit_course_lesson_forum_path(@course, @lesson, forum), class: 'btn btn-secondary' %>
+      <%= link_to 'Delete', course_lesson_forum_path(@course, @lesson, forum), method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger' %>
+    </li>
+  <% end %>
+</ul>

@@ -26,6 +26,10 @@
     <%= f.label :password_confirmation %><br />
     <%= f.password_field :password_confirmation, autocomplete: "new-password" %>
   </div>
+    <div class="field">
+    <%= f.label :role %><br />
+    <%= f.select :role, User.roles.keys.map { |role| [role.humanize, role] }, { include_blank: 'Select Role' } %>
+  </div>
 
   <div class="actions">
     <%= f.submit "Sign up" %>

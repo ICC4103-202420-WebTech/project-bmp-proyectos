@@ -1,10 +1,14 @@
 class CoursesController < ApplicationController
   before_action :authenticate_user!
   before_action :instructor_only, except: [:index, :show]
+  load_and_authorize_resource class: 'Course'
   def index
-    @latest_courses = Course.order(created_at: :desc).limit(10)
+    @latest_courses = @courses.order(created_at: :desc).limit(10)
+    
+    # Apply CanCanCan's accessibility check
+    @latest_courses = @latest_courses.accessible_by(current_ability)
+    
     Rails.logger.debug "Latest Courses: #{@latest_courses.inspect}"
-   
   end
 
   def show

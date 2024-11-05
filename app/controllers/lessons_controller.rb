@@ -46,7 +46,9 @@ class LessonsController < ApplicationController
   end
 
   private
-
+  def set_course
+    @course = Course.find(params[:course_id])
+  end
   def lesson_params
     params.require(:lesson).permit(:title, :content, :content_type)
   end

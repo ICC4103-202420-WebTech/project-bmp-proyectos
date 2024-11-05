@@ -27,7 +27,7 @@ Rails.application.routes.draw do
   get 'courses/edit'
   get 'courses/update'
   get 'courses/destroy'
-  devise_for :users
+  devise_for :users, controllers: { registrations: 'users/registrations' }
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
@@ -38,7 +38,7 @@ get 'profile', to: 'users#show', as: 'user_profile'
   root to: 'courses#index'
 
   resources :courses do
-    resources :lessons
+    resources :lessons, only: [:index, :show, :new, :create, :edit, :update, :destroy]
   end
   
   resources :users, only: [:show, :index]

@@ -12,4 +12,12 @@ class User < ApplicationRecord
          validates :name, presence: true
          validates :email, presence: true, uniqueness: true
          enum role: { instructor: 0, student: 1 }
+         def instructor?
+          role == 'instructor'
+        end
+      
+        def student?
+          role == 'student'
+        end
+
 end

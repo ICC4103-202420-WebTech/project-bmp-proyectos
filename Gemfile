@@ -71,3 +71,4 @@ gem "devise", "~> 4.9"
 gem 'bootstrap', '~> 5.1.3'
 
 gem "cssbundling-rails", "~> 1.4"
+gem 'cancancan'

@@ -9,10 +9,21 @@
           <div class="card-body">
             <h5 class="card-title"><%= course.title %></h5>
             <p class="card-text"><%= course.description %></p>
+             <%= link_to 'View Lessons', course_lessons_path(course), class: 'btn btn-primary' %>
+    
+    <% if can? :update, course %>
+      <%= link_to 'Edit', edit_course_path(course), class: 'btn btn-secondary' %>
+    <% end %>
+    <% if can? :destroy, course %>
+      <%= link_to 'Delete', course_path(course), method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger' %>
+    <% end %>
           </div>
         </div>
       </div>
     <% end %>
+    <% if can? :create, Course %>
+  <%= link_to 'New Course', new_course_path, class: 'btn btn-success' %>
+<% end %>
   <% else %>
     <p>No courses available at the moment.</p>
   <% end %>

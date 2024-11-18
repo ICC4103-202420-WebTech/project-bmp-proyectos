@@ -1,11 +1,32 @@
-<form>
-  <div class="form-group">
-    <label for="formGroupExampleInput">Type</label>
-    <input type="text" class="form-control" id="formGroupExampleInput" placeholder="Video or texto">
+<%= form_with(model: [@course, @lesson], local: true) do |form| %>
+  <% if @lesson.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@lesson.errors.count, "error") %> prohibited this lesson from being saved:</h2>
+
+      <ul>
+        <% @lesson.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= form.label :title %>
+    <%= form.text_field :title %>
   </div>
-  <div class="form-group">
-    <label for="formGroupExampleInput2">Content</label>
-    <input type="text" class="form-control" id="formGroupExampleInput2" placeholder="">
+
+  <div class="field">
+    <%= form.label :content_type %>
+    <%= form.select :content_type, Lesson.content_types.keys.map { |type| [type.humanize, type] } %>
   </div>
-   <button type="Create lesson" class="btn btn-primary">Submit</button>
-</form>
+
+  <div class="field">
+    <%= form.label :content %>
+    <%= form.text_area :content %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit %>
+  </div>
+<% end %>

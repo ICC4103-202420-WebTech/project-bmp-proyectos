@@ -6,28 +6,35 @@ class Ability
   def initialize(user)
     user ||= User.new # guest user (not logged in)
 
+    # Allow all users (including guests) to read courses and lessons
+    can :read, Course
+    can :read, Lesson
+
     if user.persisted? # If the user is logged in
+      can :read, User, id: user.id
       can :edit, User, id: user.id # Allow user to edit their own profile
       can :update, User, id: user.id # Allow user to update their own profile
       can :create, Course, user_id: user.id
       can :manage, Course, user_id: user.id
       can :manage, Lesson, course: { user_id: user.id }
-    else # guest user
-      can :read, Course # only read courses
-      can :create, User
+
+      if user.instructor?
+        can :create, Lesson, user_id: user.id # Allow instructors to create lessons
+        can :manage, Lesson, course: { user_id: user.id } # Instructors can manage their own lessons
+      end
+
+      if user.student?
+        can :read, Course do |course|
+          course.students.include?(user) # Allow access to courses the student is enrolled in
+        end
+
+        can :read, Lesson do |lesson|
+          lesson.course.students.include?(user) # Allow access to lessons in courses the student is enrolled in
+        end
+      end
     end
 
-    if user.instructor?
-      can :manage, Course, user_id: user.id
-      can :manage, Lesson, course: { user_id: user.id }
-    end
-
-    if user.student?
-      can :read, Course
-      can :read, Lesson
-    end
-
-    # Allow all users (including guests) to read courses
-    can :read, Course
+    # Allow all users (including guests) to create responses to questions
+    can :create, Answer # Assuming Response is the model for forum responses
   end
 end

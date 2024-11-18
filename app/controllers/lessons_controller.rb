@@ -10,6 +10,16 @@ class LessonsController < ApplicationController
     else
       @lessons = Lesson.all # or handle it in another way
     end
+    Rails.logger.debug("Current user: #{current_user.inspect}")
+    Rails.logger.debug("User  enrolled in courses: #{current_user.enrolled_courses.pluck(:id)}")
+  
+    if params[:course_id]
+      @course = Course.find(params[:course_id])
+      Rails.logger.debug("Course found: #{@course.inspect}")
+      @lessons = @course.lessons
+    else
+      @lessons = Lesson.all # or handle it in another way
+    end
   end
 
   def show
@@ -23,34 +33,38 @@ class LessonsController < ApplicationController
   end
 
   def create
-    @course = Course.find(params[:course_id])
-    @lesson = @course.lessons.build(lesson_params)
-
+    @course = Course.find(params[:course_id]) # Assuming you have a course_id in your params
+    @lesson = @course.lessons.build(lesson_params) # Build the lesson associated with the course
+    @lesson.user = current_user # Set the user to the currently authenticated user
+  
     if @lesson.save
-      redirect_to course_lessons_path(@course), notice: 'Lesson was successfully created.'
+      redirect_to course_lesson_path(@course, @lesson), notice: 'Lesson was successfully created.'
     else
       render :new
     end
   end
 
   def edit
-    @lesson = Lesson.find(params[:id])
+    @course = Course.find(params[:course_id])
+    @lesson = @course.lessons.find(params[:id])
   end
 
   def update
-    @lesson = Lesson.find(params[:id])
-
+    @course = Course.find(params[:course_id])
+    @lesson = @course.lessons.find(params[:id])
+  
     if @lesson.update(lesson_params)
-      redirect_to course_lessons_path(@lesson.course), notice: 'Lesson was successfully updated.'
+      redirect_to course_lesson_path(@course, @lesson), notice: 'Lesson was successfully updated.'
     else
       render :edit
     end
   end
 
   def destroy
-    @lesson = Lesson.find(params[:id])
+    @course = Course.find(params[:course_id])
+    @lesson = @course.lessons.find(params[:id])
     @lesson.destroy
-    redirect_to course_lessons_path(@lesson.course), notice: 'Lesson was successfully destroyed.'
+    redirect_to course_lessons_path(@course), notice: 'Lesson was successfully destroyed.'
   end
 
   private
@@ -61,6 +75,6 @@ class LessonsController < ApplicationController
     end
   end
   def lesson_params
-    params.require(:lesson).permit(:title, :content, :content_type)
-  end
+    params.require(:lesson).permit(:title, :content_type, :content) 
+   end
 end

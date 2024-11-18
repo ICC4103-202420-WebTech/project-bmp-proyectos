@@ -1,19 +1,25 @@
 <h1>Lessons for <%= @course.title %></h1>
 
-<% @lessons.each do |lesson| %>
-  <div class="lesson">
-    <h3><%= lesson.title %></h3>
-    <p><%= lesson.content %></p>
-    
-    <%= link_to 'View Lesson', course_lesson_path(@course, lesson), class: 'btn btn-info' %>
-    
-    <% if can? :update, lesson %>
-      <%= link_to 'Edit', edit_course_lesson_path(@course, lesson), class: 'btn btn-secondary' %>
-    <% end %>
-    <% if can? :destroy, lesson %>
-      <%= link_to 'Delete', course_lesson_path(@course, lesson), method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger' %>
-    <% end %>
-  </div>
+<% if @lessons.present? %>
+  <% @lessons.each do |lesson| %>
+    <div class="lesson">
+      <h3><%= lesson.title %></h3>
+      <p><%= lesson.content %></p>
+      
+      <%= link_to 'View Lesson', course_lesson_path(@course, lesson), class: 'btn btn-info' %>
+      
+      <% if can? :update, lesson %>
+        <%= link_to 'Edit', edit_course_lesson_path(@course, lesson), class: 'btn btn-secondary' %>
+      <% end %>
+      <% if can? :destroy, lesson %>
+        <%= link_to 'Delete', course_lesson_path(@course, lesson), method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger' %>
+      <% end %>
+    </div>
+  <% end %>
+<% else %>
+  <p>No lessons available for this course.</p>
 <% end %>
 
-<%= link_to 'New Lesson', new_course_lesson_path(@course), class: 'btn btn-success' %>
+<% if can? :create, Lesson %>
+  <%= link_to 'New Lesson', new_course_lesson_path(@course), class: 'btn btn-success' %>
+<% end %>

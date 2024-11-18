@@ -1,16 +1,24 @@
 class ForumsController < ApplicationController
   before_action :set_course_and_lesson, only: [:index, :show, :new, :create, :edit, :update, :destroy]
-  before_action :set_forum, only: [:show]
+  before_action :set_forum, only: [:show, :show_question] # Ensure this is included
+  before_action :set_question, only: [:show_question] # Only set question for the show_question action
+
   def index
     @forums = @lesson.forums
   end
+
   def show
     @questions = @forum.questions
   end
+
+  def show_question
+    @answers = @question.answers
+
+  end
+
   def new
     @forum = @lesson.forums.new
   end
-
 
   def create
     @forum = @lesson.forums.new(forum_params)
@@ -20,7 +28,6 @@ class ForumsController < ApplicationController
       render :new
     end
   end
-
 
   def edit
     @forum = @lesson.forums.find(params[:id])
@@ -47,12 +54,16 @@ class ForumsController < ApplicationController
     params.require(:forum).permit(:title, :description) # Adjust the permitted parameters as needed
   end
   
- def set_course_and_lesson
+  def set_course_and_lesson
     @course = Course.find(params[:course_id])
     @lesson = @course.lessons.find(params[:lesson_id])
   end
 
   def set_forum
-    @forum = Forum.find(params[:id])
+    @forum = Forum.find(params[:id]) # This assumes the forum_id is passed in the URL
+  end
+
+  def set_question
+    @question = @forum.questions.find(params[:id]) # Assuming the question ID is passed as :id
   end
 end

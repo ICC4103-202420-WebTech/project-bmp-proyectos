@@ -17,7 +17,7 @@ class CoursesController < ApplicationController
 
   def show
     @course = Course.find(params[:id])
-    @lections = @course.lessons
+    @lessons = @course.lessons
     @inscription = current_user.inscriptions.find_by(course_id: @course.id)
   end
 

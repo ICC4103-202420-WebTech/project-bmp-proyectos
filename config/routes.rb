@@ -40,7 +40,7 @@ get 'profile', to: 'users#show', as: 'user_profile'
   resources :courses do
     resources :lessons, only: [:index, :show, :new, :create, :edit, :update, :destroy] do
       resources :forums, only: [:index, :show, :new, :create, :edit, :update, :destroy] do
-        resources :questions, only: [:index, :new, :create] do
+        resources :questions, only: [:index, :new, :create, :show] do
           resources :answers, only: [:create]
         end
       end
